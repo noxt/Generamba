@@ -3,3 +3,5 @@ os:
 language: ruby
 rvm:
   - 2.1.6
+script:
+  - bundle exec rake -t
