@@ -10,6 +10,12 @@
 
 ![Generamba Screenshot](https://habrastorage.org/files/b98/770/b37/b98770b37dc54de98daf0e22fea38478.gif)
 
+### Buid
+
+```bash
+$ gem build generamba.gemspec && gem install --local generamba-1.0.2.gem
+```
+
 ### Key features
 
 - Supports work with *.xcodeproj* files out of the box. All generated class files are automaticly placed on specific folders and groups of Xcode project.

@@ -20,7 +20,7 @@ module Generamba
     def self.add_file_to_project_and_targets(project, targets_name, group_path, file_path, file_is_resource = false)
       module_group = self.retrieve_group_or_create_if_needed(group_path, project, true)
       xcode_file = module_group.new_file(File.absolute_path(file_path))
-
+      
       file_name = File.basename(file_path)
       targets_name.each do |target|
         xcode_target = obtain_target(target, project)
