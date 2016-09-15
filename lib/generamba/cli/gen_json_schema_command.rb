@@ -60,7 +60,13 @@ module Generamba::CLI
       puts('Add files to project...')
       FileUtils.cp_r(Dir['%s/*' % generated_filed_path.to_s], group_path.to_s)
       group_path.children.each do |model_file_path|
-        XcodeprojHelper.add_file_to_project_and_targets(project, [target], project_group_path, model_file_path)
+				XcodeprojHelper.add_file_to_project_and_targets(project,
+																												[target],
+																												project_group_path,
+																												group_path,
+																												false,
+																												model_file_path,
+																												false)
       end
       
       project.save

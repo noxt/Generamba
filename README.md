@@ -10,11 +10,6 @@
 
 ![Generamba Screenshot](https://habrastorage.org/files/b98/770/b37/b98770b37dc54de98daf0e22fea38478.gif)
 
-### Buid
-
-```bash
-$ gem build generamba.gemspec && gem install --local generamba-1.0.2.gem
-```
 
 ### Key features
 
@@ -32,6 +27,13 @@ $ ruby --version
 When necessary you can install the required Ruby version with the help of [`rvm`](http://octopress.org/docs/setup/rvm/) or [`rbenv`](http://octopress.org/docs/setup/rbenv/).
 
 Run the command `gem install generamba`.
+
+Buil generamba
+
+```bash
+$ gem build generamba.gemspec && gem install --local generamba-1.2.1.gem
+```
+
 
 ### Usage
 1. Run [`generamba setup`](https://github.com/rambler-ios/Generamba/wiki/Available-Commands#basic-generamba-configuration) in the project root folder. This command helps to create [Rambafile](https://github.com/rambler-ios/Generamba/wiki/Rambafile-Structure) that define all configuration needed to generate code. You can modify this file directly in future.
