@@ -30,6 +30,7 @@ module Generamba::CLI
       json_schemas_dir = rambafile['json_schema']['input']
       models_types_dir = rambafile['json_schema']['output']
       generator_dir = rambafile['json_schema']['generator']
+      target = rambafile['json_schema']['target']
  
       group_path = Pathname.new(Dir.getwd).join(models_types_dir)
       project_group_path = Pathname.new(models_types_dir)
@@ -40,7 +41,7 @@ module Generamba::CLI
 
       generated_filed_path.children.each { |p| FileUtils.rm(p) }
       group_path.children.each { |p| FileUtils.rm(p) }
-      XcodeprojHelper.clear_group(project, [rambafile['project_target']], project_group_path)
+      XcodeprojHelper.clear_group(project, [target], project_group_path)
 
       puts('Generate models...')
       Pathname.new(Dir.getwd).join(json_schemas_dir).children.each do |json_schema_file_path|
@@ -59,7 +60,7 @@ module Generamba::CLI
       puts('Add files to project...')
       FileUtils.cp_r(Dir['%s/*' % generated_filed_path.to_s], group_path.to_s)
       group_path.children.each do |model_file_path|
-        XcodeprojHelper.add_file_to_project_and_targets(project, [rambafile['project_target']], project_group_path, model_file_path)
+        XcodeprojHelper.add_file_to_project_and_targets(project, [target], project_group_path, model_file_path)
       end
       
       project.save
