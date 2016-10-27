@@ -27,46 +27,35 @@ module Generamba::CLI
       rambafile = YAML.load_file(RAMBAFILE_NAME)
 
       project = XcodeprojHelper.obtain_project(rambafile['xcodeproj_path'])
-      json_schemas_dir = rambafile['json_schema']['input']
-      models_types_dir = rambafile['json_schema']['output']
-      generator_dir = rambafile['json_schema']['generator']
+      models_types_dir = rambafile['json_schema']['models_path']
+      gen_command = rambafile['json_schema']['gen_command']
+      generator_dir = rambafile['json_schema']['generator_dir']
       target = rambafile['json_schema']['target']
  
       group_path = Pathname.new(Dir.getwd).join(models_types_dir)
       project_group_path = Pathname.new(models_types_dir)
 
       puts('Remove old models...')
-      generated_filed_path = Pathname.new(Dir.getwd).join(generator_dir).join('output')
-      FileUtils.mkdir(generated_filed_path) unless File.exists?(generated_filed_path)
-
-      generated_filed_path.children.each { |p| FileUtils.rm(p) }
       group_path.children.each { |p| FileUtils.rm(p) }
       XcodeprojHelper.clear_group(project, [target], project_group_path)
 
       puts('Generate models...')
-      Pathname.new(Dir.getwd).join(json_schemas_dir).children.each do |json_schema_file_path|
-        command = 'cd "%s" && node "%s" -s "%s" -a "%s" -p "%s" -c "%s" --use-struct --has-header && cd "%s"' % [
-          Pathname.new(Dir.getwd).join(generator_dir).to_s,
-          Pathname.new(Dir.getwd).join(generator_dir).join('index.js').to_s,
-          json_schema_file_path,
-          Generamba::UserPreferences.obtain_username,
-          rambafile['project_name'],
-          rambafile['company'],
-          Pathname.new(Dir.getwd).to_s
-          ]
-        system(command)
-      end
+      command = 'cd "%s" && %s && cd "%s"' % [
+        Pathname.new(Dir.getwd).join(generator_dir).to_s,
+        gen_command,
+        Pathname.new(Dir.getwd).to_s
+        ]
+      system(command)
 
       puts('Add files to project...')
-      FileUtils.cp_r(Dir['%s/*' % generated_filed_path.to_s], group_path.to_s)
       group_path.children.each do |model_file_path|
-				XcodeprojHelper.add_file_to_project_and_targets(project,
-																												[target],
-																												project_group_path,
-																												group_path,
-																												false,
-																												model_file_path,
-																												false)
+        XcodeprojHelper.add_file_to_project_and_targets(project,
+                                                        [target],
+                                                        project_group_path,
+                                                        group_path,
+                                                        false,
+                                                        model_file_path,
+                                                        false)
       end
       
       project.save
